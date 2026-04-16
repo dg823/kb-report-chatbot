@@ -12,7 +12,13 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
 
 load_dotenv("./data/.env")
-api_key = os.getenv("OPENAI_API_KEY")
+
+if "OPENAI_API_KEY" in st.secrets:
+    api_key = st.secrets["OPENAI_API_KEY"]
+else:
+    from dotenv import load_dotenv
+    load_dotenv("./data/.env")
+    api_key = os.getenv("OPENAI_API_KEY")
 
 @st.cache_resource
 def initialize_vectorstore():
