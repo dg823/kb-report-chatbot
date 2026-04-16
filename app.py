@@ -1,6 +1,5 @@
 import os
 import streamlit as st
-from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
@@ -11,14 +10,11 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
 
-load_dotenv("./data/.env")
+api_key = st.secrets["OPENAI_API_KEY"]
 
-if "OPENAI_API_KEY" in st.secrets:
-    api_key = st.secrets["OPENAI_API_KEY"]
-else:
-    from dotenv import load_dotenv
-    load_dotenv("./data/.env")
-    api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    st.error("OpenAI API Key가 설정되지 않았습니다. Streamlit Cloud의 Advanced settings를 확인하세요.")
+    st.stop()
 
 @st.cache_resource
 def initialize_vectorstore():
