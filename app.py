@@ -10,10 +10,20 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
 
-api_key = st.secrets["OPENAI_API_KEY"]
+api_key = None
+
+try:
+    api_key = st.secrets["OPENAI_API_KEY"]
+except:
+    pass
 
 if not api_key:
-    st.error("OpenAI API Key가 설정되지 않았습니다. Streamlit Cloud의 Advanced settings를 확인하세요.")
+    from dotenv import load_dotenv
+    load_dotenv("./data/.env")
+    api_key = os.getenv("OPENAI_API_KEY")
+
+if not api_key:
+    st.error("OpenAI API Key를 찾을 수 없습니다. 설정 환경을 확인해 주세요.")
     st.stop()
 
 @st.cache_resource
@@ -74,7 +84,7 @@ def initialize_chain():
 def main():
     st.set_page_config(page_title="KB 부동산 보고서 챗봇", page_icon="🏠")
     st.title("🏠 KB 부동산 보고서 AI 어드바이저")
-    st.caption("2024 KB 부동산 보고서 기반 질의응답 시스템")
+    st.caption("2024 KB 부동산 보고서 기반 질의응답 시스템(202204247_이동건)")
     
     chain = initialize_chain()
     
