@@ -2,7 +2,7 @@ streamlit
 langchain
 langchain-community
 langchain-openai
-langchain-textsplitters
+langchain-text-splitters
 python-dotenv
 faiss-cpu
 pypdf
